@@ -10,22 +10,21 @@ public class ColorSwapFast : MonoBehaviour, IColorSwapRandomizer
   [SerializeField] private Color32 newColor = Color.red;
   [SerializeField] private Text benchmarkSpeed;
   
-  private Material _cubeMaterial;
   private Texture2D _cubeTexture;
   private Color32[] _cubeArray;
 
   void Start()
   {
     // Get instance's material (not shared material, so changed only affect this object)
-    _cubeMaterial = GetComponent<MeshRenderer>().material;
+    var cubeMaterial = GetComponent<MeshRenderer>().material;
     // Original texture must be RGB or RGBA format, with no compression
-    var originalCubeTexture = _cubeMaterial.mainTexture as Texture2D;
+    var originalCubeTexture = cubeMaterial.mainTexture as Texture2D;
 
     // Duplicate the texture and assign it to our object so we don't change the original
     _cubeTexture = new Texture2D(originalCubeTexture.width, originalCubeTexture.height,
       originalCubeTexture.format, originalCubeTexture.mipmapCount > 1);
     Graphics.CopyTexture(originalCubeTexture, _cubeTexture);
-    _cubeMaterial.mainTexture = _cubeTexture;
+    cubeMaterial.mainTexture = _cubeTexture;
     _cubeArray = _cubeTexture.GetPixels32();
   }
 
